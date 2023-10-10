@@ -1,0 +1,36 @@
+$secondary-color: #8bd8bc;
+
+.logo {
+  width: 12rem;
+}
+
+header {
+  background-color: #000c19!important;
+}
+
+.secondary-button {
+  background-color: $secondary-color!important;
+}
+
+.px-6 {
+  margin: 0 10rem;
+}
+
+.light-bg {
+  background-color: #EEF2F7!important;
+}
+
+#carousel {
+
+  img {
+    height: 70vh;
+    object-fit: cover;
+  }
+
+  
+}
+
+.card img {
+  height: 12rem;
+  object-fit: cover;
+}

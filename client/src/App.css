@@ -1,0 +1,18 @@
+.px-6 {
+  padding: 6rem;
+}
+
+.dropdown-hr {
+  margin: 0;
+}
+
+.dropdown-item {
+  padding-top: 0.5rem!important;
+  padding-bottom: 0.5rem!important;
+}
+
+
+.acc-error {
+  text-align: center;
+  color: red;
+}
