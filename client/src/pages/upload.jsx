@@ -41,6 +41,7 @@ const UploadVideo = () => {
       const response = await axios.post("http://localhost:3000/upload", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
       // console.log(response.data);

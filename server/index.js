@@ -56,12 +56,12 @@ app.post('/login', async (req, res) =>{
         let token = jwt.sign(payload, process.env.JWT_SECRET);
         res.status(200).json({msg: "Valid credentials", token, name: user.name, email: user.email});
       } else {
-        res.status(203).json({msg: "Invalid password"});
+        res.status(202).json({msg: "Invalid password"});
       }
     }else {
-      res.status(404).json({msg: "User not found"});
+      res.status(203).json({msg: "User not found"});
     }
-    console.log(req.body);
+    // console.log(req.body);
   } catch (error) {
     console.log(error);
     res.status(500).json({msg: "Server Error"});
@@ -71,7 +71,6 @@ app.post('/login', async (req, res) =>{
 app.post('/register', async (req, res) =>{
   const {name, email, pass} = req.body;
 
-  
   try {
     const user = await User.findOne({email});
 
@@ -96,8 +95,9 @@ app.post('/register', async (req, res) =>{
   }
 });
 
-app.post('/verifyToken', async (req, res) =>{
+const verifyToken = async (req, res, next) =>{
   let token = req.headers['x-access-token'] || req.headers['authorization'];
+  // console.log(req);
 
   try {
     if (token && token.startsWith('Bearer ')) {
@@ -107,9 +107,10 @@ app.post('/verifyToken', async (req, res) =>{
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-          return res.json({msg: 'Invalid'});
+          return res.json({msg: 'Invalid Token'});
         } else {
-          return res.status(200).json({msg: 'Valid Token'});
+          next();
+          // return res.status(200).json({msg: 'Valid Token'});
         }
       });
     }
@@ -117,20 +118,9 @@ app.post('/verifyToken', async (req, res) =>{
     console.log(error);
     res.status(500).json({msg: "Server Error"});
   }
-})
+}
 
-app.get('/video', async (req, res) => {
-  try {
-    const videoDir = req.query.url;
-    console.log(req.query.url);
-    res.sendFile(rootVideoDir + videoDir, {root: '/'});
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Error fetching video' });
-  }
-})
-
-app.post('/videoData', async (req, res) => {
+app.post('/videoData', verifyToken, async (req, res) => {
   try {
     console.log(req.body.body.videoUrl);
     const data = await Video.find({videoUrl: req.body.body.videoUrl});
@@ -142,7 +132,7 @@ app.post('/videoData', async (req, res) => {
   }
 })
 
-app.post('/upload', upload.single('video'), async (req, res) => {
+app.post('/upload', verifyToken, upload.single('video'), async (req, res) => {
   console.log(req.body.fileName.split('_'));
   
   const video = new Video({
@@ -157,7 +147,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   else res.status(500).json({msg: 'Error in uploading video'});
 });
 
-app.post('/myvideos', async (req, res) => {
+app.post('/myvideos', verifyToken, async (req, res) => {
   try{
     const data = await Video.find({email: req.body.email});
     res.status(200).json({videos: data});
@@ -168,7 +158,7 @@ app.post('/myvideos', async (req, res) => {
   }
 })
 
-app.post('/allvideos', async (req, res) => {
+app.post('/allvideos', verifyToken, async (req, res) => {
   try{
     const data = await Video.find({});
     res.status(200).json({videos: data});
@@ -176,6 +166,17 @@ app.post('/allvideos', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({msg: "Server Error"});
+  }
+})
+
+app.get('/video', async (req, res) => {
+  try {
+    const videoDir = req.query.url;
+    // console.log(req.query.url);
+    res.sendFile(rootVideoDir + videoDir, {root: '/'});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Error fetching video' });
   }
 })
 

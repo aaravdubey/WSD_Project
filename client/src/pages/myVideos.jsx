@@ -6,7 +6,7 @@ const MyVideos = () => {
   const [videos, setVideos] = useState([]);
 
   async function getMyVideos() {
-    const data = await axios.post("http://localhost:3000/myvideos", { email: localStorage.getItem('email') });
+    const data = await axios.post("http://localhost:3000/myvideos", { email: localStorage.getItem('email') }, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
     console.log(data.data.videos);
 
     if (data.data.videos.length > 0) setVideos(data.data.videos);

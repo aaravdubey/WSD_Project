@@ -19,7 +19,7 @@ const VideoPlayer = () => {
   // const [isDisliked, setIsDisliked] = useState(false);
 
   useEffect(() => {
-    axios.post('http://localhost:3000/videoData', {method: "POST",body: {videoUrl: localStorage.getItem('url')}})
+    axios.post('http://localhost:3000/videoData', {method: "POST",body: {videoUrl: localStorage.getItem('url')}}, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
       .then((response) => {
         console.log(response);
         setVideoData(response.data.data[0])

@@ -12,7 +12,7 @@ const Home = () => {
   const [searchInp, setSearchInp] = useState('');
 
   async function getAllVideos() {
-    const data = await axios.post("http://localhost:3000/allvideos");
+    const data = await axios.post("http://localhost:3000/allvideos", {}, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
     console.log(data.data.videos);
 
     if (data.data.videos.length > 0) {
@@ -61,22 +61,22 @@ const Home = () => {
         <div className="carousel-item active" data-bs-interval="10000">
           <img src="https://www.openxcell.com/wp-content/uploads/2021/12/What-is-ReactJS-1.svg?x68452" className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block text-white ">
-            <h5>First slide label</h5>
-            <p>Some representative placeholder content for the first slide.</p>
+            <h5>Learn ReactJS</h5>
+            <p>ReactJS's primary goal is to create User Interfaces (UI) which enhance the speed of programs. It makes use of virtual DOM (JavaScript object), which enhances the app's efficiency..</p>
           </div>
         </div>
         <div className="carousel-item" data-bs-interval="2000">
           <img src="https://community-cdn-digitalocean-com.global.ssl.fastly.net/AqgUzdgAbUVtDzoUrbKUfmnx" className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block text-white ">
-            <h5>Second slide label</h5>
-            <p>Some representative placeholder content for the second slide.</p>
+            <h5>MongoDB commands and Atlas</h5>
+            <p>MongoDB Atlas is a multi-cloud database service by the same people that build MongoDB. Atlas simplifies deploying and managing your databases.</p>
           </div>
         </div>
         <div className="carousel-item">
           <img src="https://nextjs.org/static/blog/next-13/twitter-card.png" className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block text-white">
-            <h5>Third slide label</h5>
-            <p>Some representative placeholder content for the third slide.</p>
+            <h5>Next.JS - A ReactJS Framework</h5>
+            <p>Next.js is an open-source web development framework created by the private company Vercel providing React-based web applications with server-side rendering and static website generation..</p>
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@ const Home = () => {
     </div>
 
     <section className="px-6 py-5 light-bg">
-      <h2 className="pb-3">Popular Vids</h2>
+      <h2 className="pb-3">Video Tutorials</h2>
 
       <div className="row row-cols-1 row-cols-md-3 g-4">
         {filVideos.length > 0 ? filVideos.map((video, index) =>

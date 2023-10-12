@@ -13,6 +13,10 @@
 
 
 .acc-error {
+  width: 14.5rem;
   text-align: center;
   color: red;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  /* word-break: break-all; */
 }
