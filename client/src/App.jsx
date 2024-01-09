@@ -6,6 +6,8 @@ import Login from './pages/login'
 import Register from './pages/register'
 import UploadVideo from './pages/upload'
 import MyVideos from './pages/myVideos'
+import Saved from './pages/saved'
+import ListVideos from './pages/listVideos'
 
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
         <Route path='video' element={<VideoPlayer />} />
         <Route path='upload' element={<UploadVideo />} />
         <Route path='myvideos' element={<MyVideos />} />
+        <Route path='saved' element={<Saved />} />
+        <Route path='listVideos' element={<ListVideos />} />
       </Routes>
       
     </BrowserRouter>

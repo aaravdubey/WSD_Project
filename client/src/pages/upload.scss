@@ -47,3 +47,14 @@
   }
 
 }
+
+.alert{
+  a {
+    color: #0a3622;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}

@@ -26,8 +26,10 @@ const Register = () => {
     var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
     if (passwordRegex.test(pass)) {
       if (pass == cpass) {
-        const response = await axios.post('http://localhost:3000/register', { name, email, pass });
-        if (response.status == 201) navigate('/login');
+        const response = await axios.post('http://localhost:3000/account/register', { name, email, pass });
+        if (response.status == 201) {
+          navigate('/login');
+        }
         else if (response.status == 203) setRError(true);
         console.log(response);
       } else setMError(true);

@@ -38,7 +38,7 @@ const UploadVideo = () => {
       formData.append('fileName', fileName);
       formData.append('name', localStorage.getItem('name'));
 
-      const response = await axios.post("http://localhost:3000/upload", formData, {
+      const response = await axios.post("http://localhost:3000/video/upload", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -51,11 +51,11 @@ const UploadVideo = () => {
         setDesc('');
 
         setIsSuccess(true);
-        setTimeout(() => {
-          setIsSuccess(false);
-          navigate('/myvideos ');
+        // setTimeout(() => {
+        //   setIsSuccess(false);
+        //   navigate('/myvideos ');
 
-        }, 2000);
+        // }, 2000);
         
       }
     }
@@ -105,7 +105,7 @@ const UploadVideo = () => {
         <button type="submit" className="btn btn-primary py-3 fw-bold ">Upload</button>
 
         {isSuccess && <div className="alert alert-success mt-4" role="alert">
-          Video uploaded succesfully!
+          Video uploaded succesfully! <a href="/myvideos">Go to My Videos &#8594;</a>
         </div>}
       </section>
     </form>

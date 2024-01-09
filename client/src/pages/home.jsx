@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import "./home.scss";
 import axios from "axios";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Footer from "../components/Footer";
+import VideoCard from "../components/VideoCard";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,9 +12,10 @@ const Home = () => {
   const [videos, setVideos] = useState([]);
   const [filVideos, setFilVideos] = useState([]);
   const [searchInp, setSearchInp] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
 
   async function getAllVideos() {
-    const data = await axios.post("http://localhost:3000/allvideos", {}, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
+    const data = await axios.post("http://localhost:3000/video/allvideos", {}, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } });
     console.log(data.data.videos);
 
     if (data.data.videos.length > 0) {
@@ -23,21 +26,38 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('token')==null || localStorage.getItem('token')=='') navigate('/login');
+    if (localStorage.getItem('token') == null || localStorage.getItem('token') == '') navigate('/login');
     else {
-      axios.post('http://localhost:3000/verifyToken', {}, {headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }})
-        .then(response => {
-          if (response.data.msg == "Invalid") navigate('/login');
-        })
-        getAllVideos();
+      // axios.post('http://localhost:3000/verifyToken', {}, {headers: {
+      //   Authorization: `Bearer ${localStorage.getItem('token')}`
+      // }})
+      //   .then(response => {
+      //     if (response.data.msg == "Invalid") navigate('/login');
+      //   })
+      getAllVideos();
     }
   }, [])
 
+  useEffect(() => {
+    if (isFocus) {
+      const targetSection = document.getElementById('videos-section');
+
+      if (targetSection) {
+        const sectionTop = targetSection.offsetTop;
+        const adjustedScrollPosition = sectionTop - 70;
+
+        window.scrollTo({
+          top: adjustedScrollPosition,
+          behavior: 'smooth',
+        });
+      }
+
+      setIsFocus(false);
+    }
+  }, [isFocus])
+
   function handleSearch(e) {
     e.preventDefault();
-    console.log('fff');
     setSearchInp(e.target.value);
 
     let filteredVids = videos.filter((vid) => {
@@ -46,10 +66,12 @@ const Home = () => {
     console.log(filteredVids);
     if (e.target.value == '') setFilVideos(videos);
     else setFilVideos(filteredVids);
+
+    setIsFocus(true);
   }
 
   return <>
-    <Header searchInp={searchInp} setSearchInp={setSearchInp} handleSearch={handleSearch} />
+    <Header searchInp={searchInp} setSearchInp={setSearchInp} handleSearch={handleSearch} setIsFocus={setIsFocus} />
 
     <div id="carousel" className="carousel slide flex-fill" data-bs-ride="carousel">
       <div className="carousel-indicators">
@@ -80,39 +102,30 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <button className="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+      {/* <button className="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Previous</span>
       </button>
       <button className="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Next</span>
-      </button>
+      </button> */}
     </div>
 
-    <section className="px-6 py-5 light-bg">
-      <h2 className="pb-3">Video Tutorials</h2>
+    <section className="px-6 py-5 light-bg" id="videos-section">
 
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {filVideos.length > 0 ? filVideos.map((video, index) =>
-          <div className="col" key={index}>
-            <div className="card shadow border-0 overflow-hidden " >
-              <video>
-                <source src={'http://localhost:3000/video?url=' + video.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="card-body">
-                <h5 className="card-title">{video.title}</h5>
-                <p className="card-text">{video.description.length > 80 ? video.description.substring(0, 80) + ' ...' : video.description + '.'}</p>
-                <a onClick={() => localStorage.setItem('url', video.videoUrl)} href="/video" className="btn secondary-button shadow-sm text-white">Watch Video</a>
-              </div>
-            </div>
-          </div>) : <div className="">No videos uploaded.</div>}
-
+      <div className="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-5">
+        {
+          filVideos.length > 0 ? filVideos.map((video, index) =>
+            <VideoCard video={video} displaySave={true} displayRemove={false} key={index} />)
+            : <div className="">No videos uploaded.</div>
+        }
 
       </div>
 
     </section >
+
+    <Footer />
   </>
 }
 
